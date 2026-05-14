@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 type Price = {
   timeStart: string;
   timeEnd: string;
-  SEK: number;
+  sek: number;
 };
 
 export default function Home() {
@@ -29,7 +29,7 @@ export default function Home() {
 
   // hitta billigaste timmen
   const cheapest = prices.reduce((min, p) =>
-    p.SEK < min.SEK ? p : min
+    p.sek < min.sek ? p : min
   , prices[0]);
 
   function getColor(price: number) {
@@ -37,6 +37,7 @@ export default function Home() {
     if (price < 1.3) return "#eab308"; // gul
     return "#ef4444"; // röd
   }
+
 
   return (
     <main style={styles.page}>
@@ -50,8 +51,7 @@ export default function Home() {
       <div style={styles.highlight}>
         🟢 Billigaste timmen:{" "}
         <b>
-          {new Date(cheapest.timeStart).getHours()}:00 –{" "}
-          {cheapest.SEK.toFixed(2)} kr/kWh
+          🟢 Billigaste timmen: {cheapest.timeStart} – {cheapest.sek.toFixed(2)} kr/kWh
         </b>
       </div>
     </div>
@@ -65,18 +65,17 @@ export default function Home() {
             key={i}
             style={{
               ...styles.card,
-              borderColor: getColor(p.SEK),
+              borderColor: getColor(p.sek),
               transform: isCheapest ? "scale(1.03)" : "scale(1)",
               background: isCheapest ? "#30b577" : "white",
             }}
           >
             <div style={styles.time}>
-              ⏰ {new Date(p.timeStart).getHours()}:00 -{" "}
-              {new Date(p.timeEnd).getHours()}:00
+               ⏰ {p.timeStart} - {p.timeEnd}
             </div>
 
             <div style={styles.price}>
-              {p.SEK.toFixed(2)} kr/kWh
+              {p.sek.toFixed(2)} kr/kWh
             </div>
 
             {isCheapest && <div style={styles.badge}>🔥 Billigast</div>}
@@ -101,7 +100,7 @@ const styles: any = {
   },
 
   sub: {
-    color: "#2c2e2f",
+    color: "#226485",
     marginTop: "-10px",
   },
 
