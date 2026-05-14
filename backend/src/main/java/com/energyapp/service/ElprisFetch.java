@@ -15,10 +15,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class ElprisFetch {
@@ -33,7 +31,7 @@ private static final Gson GSON = new Gson();
                 datum.getYear(),
                 datum.getMonthValue(),
                 datum.getDayOfMonth(),
-                zon
+                zone
         );
 
         try {
@@ -65,7 +63,19 @@ private static final Gson GSON = new Gson();
 
             Elpris[] prices = GSON.fromJson(json, Elpris[].class);
 
-            return Arrays.asList(prices);
+
+            List<Elpris> cleaned = Arrays.stream(prices)
+                    .collect(Collectors.toMap(
+                            Elpris::getTimeStart,
+                            p -> p,
+                            (a, b) -> a
+                    ))
+                    .values()
+                    .stream()
+                    .sorted(Comparator.comparing(Elpris::getTimeStart))
+                    .toList();
+
+            return cleaned;
         } catch (Exception e) {
             System.out.println("Error when fetching " + url + e.getMessage());
             return Collections.emptyList();

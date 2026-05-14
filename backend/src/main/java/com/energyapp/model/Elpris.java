@@ -43,5 +43,10 @@ public class Elpris {
         return ZonedDateTime.parse(time_end, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
+    public void setSEK(double avg) {
     }
+
+    public void setTimeStart(ZonedDateTime key) {
+    }
+}
 
